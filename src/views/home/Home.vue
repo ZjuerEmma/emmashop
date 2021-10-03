@@ -6,26 +6,10 @@
     <home-swiper :banners="banners"> </home-swiper>
     <recommend-view :recommends="recommends"></recommend-view>
     <feature-view></feature-view>
-    <tab-control :titles="['流行', '新款', '精选']"></tab-control>
-    <ul>
-      <li>list1</li>
-      <li>list1</li>
-      <li>list1</li>
-      <li>list1</li>
-      <li>list1</li>
-      <li>list1</li>
-      <li>list1</li>
-      <li>list1</li>
-      <li>list1</li>
-      <li>list1</li>
-      <li>list1</li>
-      <li>list1</li>
-      <li>list1</li>
-      <li>list1</li>
-      <li>list1</li>
-      <li>list1</li>
-      <li>list1</li>
-    </ul>
+    <tab-control
+      class="tab-control"
+      :titles="['流行', '新款', '精选']"
+    ></tab-control>
   </div>
 </template>
 
@@ -37,7 +21,7 @@ import HomeSwiper from "./childcomps/HomeSwiper.vue";
 import RecommendView from "./childcomps/RecommendView.vue";
 import FeatureView from "./childcomps/FeatureView.vue";
 
-import { getHomeMultidata } from "../../network/home";
+import { getHomeMultidata, getHomeGoods } from "../../network/home";
 
 export default {
   name: "home",
@@ -51,7 +35,12 @@ export default {
   data() {
     return {
       banners: [],
-      recommends: []
+      recommends: [],
+      goods: {
+        pop: { page: 0, list: [] },
+        news: { page: 0, list: [] },
+        sell: { page: 0, list: [] }
+      }
     };
   },
   //   data的内容属于组件，所以一直存在引用，而且不会被回收。
@@ -59,6 +48,9 @@ export default {
     getHomeMultidata().then(res => {
       this.banners = res.data.banner.list;
       this.recommends = res.data.recommend.list;
+    });
+    getHomeGoods("pop", 1).then(res => {
+      console.log(res);
     });
   }
 };
@@ -76,5 +68,9 @@ export default {
   left: 0;
   right: 0;
   top: 0;
+}
+.tab-control {
+  position: sticky;
+  top: 44px;
 }
 </style>
